@@ -55,7 +55,8 @@ auth(authConfig, function (err, res) {
             json: true
         }, function (err, resp, body) {
             var msg = 'Fixes GH-' + issue + ' - "' + body.title + '"';
-            msg += lines.shift().join('\n');
+            lines.shift();
+            msg += '\n' + lines.join('\n');
 
             fs.writeFile(file, msg, function (err) {
                 if (err) return process.exit(1);

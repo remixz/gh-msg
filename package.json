@@ -4,6 +4,7 @@
   "description": "Git commit message hook for GitHub issues",
   "main": "index.js",
   "bin": "bin/gh-msg",
+  "preferGlobal": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/remixz/gh-msg.git"

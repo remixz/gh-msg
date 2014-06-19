@@ -2,6 +2,8 @@
 
 A git `commit-msg` hook that integrates with Github issues.
 
+[![NPM](https://nodei.co/npm/gh-msg.png?compact=true)](https://nodei.co/npm/gh-msg/)
+
 ### Installation
 
 ```bash

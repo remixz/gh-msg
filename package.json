@@ -1,6 +1,6 @@
 {
   "name": "gh-msg",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Git commit message hook for GitHub issues",
   "main": "index.js",
   "bin": "bin/gh-msg",

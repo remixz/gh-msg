@@ -1,0 +1,28 @@
+{
+  "name": "gh-msg",
+  "version": "0.0.0",
+  "description": "Git commit message hook for GitHub issues",
+  "main": "index.js",
+  "bin": "bin/gh-msg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/remixz/gh-msg.git"
+  },
+  "keywords": [
+    "git",
+    "github",
+    "hook",
+    "commit"
+  ],
+  "author": "Zach Bruggeman <mail@bruggie.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/remixz/gh-msg/issues"
+  },
+  "homepage": "https://github.com/remixz/gh-msg",
+  "dependencies": {
+    "ghauth": "^0.3.0",
+    "minimist": "^0.2.0",
+    "request": "^2.36.0"
+  }
+}

@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+
+/**
+ * gh-msg - Git commit message hook for GitHub issues
+ * (c) 2014 Zach Bruggeman
+ * MIT License
+ *
+ * @package gh-msg
+ * @author Zach Bruggeman <mail@bruggie.com>
+ */
+
+var fs = require('fs');
+var path = require('path');
+var argv = require('minimist')(process.argv.slice(2));
+var exec = require('child_process').exec;
+var auth = require('ghauth');
+
+if (!argv._[0]) return console.error('ERROR: You must specify a repository: gh-msg user/repo.'); 
+
+var hooks = path.resolve(process.cwd(), '.git/hooks');
+var agent = 'gh-msg (https://github.com/remixz/gh-msg)';
+var authConfig = {
+    configName: 'ghmsg',
+    scopes: ['repo'],
+    note: agent,
+    userAgent: agent
+};
+
+// sort of callback hell, but oh well, it's readable
+fs.readdir(hooks, function (err, files) {
+    if (err) {
+        if (err.code === 'ENOENT') return console.error('ERROR: There doesn\'t appear to be a git repository in this folder.');
+        else throw err;
+    }
+
+    if (files.indexOf('commit-msg') && !argv.force) return console.error('ERROR: A commit-msg hook already exists. Please run this command again with --force to overwrite it.');
+
+    console.log('Creating link...\nIf this fails, you may have to run as root.');
+    fs.readFile(__dirname + '/../index.js', 'utf-8', function (err, data) {
+        if (err) throw err;
+
+        data = data.replace('{{REPO}}', argv._[0]);
+        var hookPath = __dirname + '/../hooks/' + argv._[0].replace('/', '-') + '.hook';
+
+        fs.writeFile(hookPath, data, function (err) {
+            if (err) throw err;
+
+            fs.chmod(hookPath, '0755', function (err) {
+                if (err) throw err;
+
+                fs.unlink(hooks + '/commit-msg', function (err) {
+                    if (err && err.code !== 'ENOENT') throw err;
+
+                    fs.symlink(hookPath, hooks + '/commit-msg', function (err) {
+                        if (err) throw err;
+
+                        // has to be run here once
+                        auth(authConfig, function (err) {
+                            if (err) throw err;
+
+                            console.log('Successfully created commit hook!')
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
